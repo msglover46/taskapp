@@ -38,16 +38,17 @@ class InputViewController: UIViewController {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        try! realm.write {
-            self.task.title = self.titleTextField.text!
-            self.task.category = self.categoryTextField.text!
-            self.task.contents = self.contentsTextView.text
-            self.task.date = self.datePicker.date
-            self.realm.add(self.task, update: .modified)
+        // タイトルとカテゴリーの両方を入力しないとタスクとして登録しないようにする。
+        if titleTextField.text != "" && categoryTextField.text != "" {
+            try! realm.write {
+                self.task.title = self.titleTextField.text!
+                self.task.category = self.categoryTextField.text!
+                self.task.contents = self.contentsTextView.text
+                self.task.date = self.datePicker.date
+                self.realm.add(self.task, update: .modified)
+            }
+            setNotification(task: task)
         }
-        
-        setNotification(task: task)
-        
         super.viewWillDisappear(animated)
     }
 
@@ -55,16 +56,16 @@ class InputViewController: UIViewController {
     func setNotification(task: Task) {
         let content = UNMutableNotificationContent()
         //タイトルと内容を設定（中身がない場合はメッセージなしで音だけの通知になるので「（xxなし）」を表示する）
-        if task.title == "" {
-            content.title = "(タイトルなし)"
-        } else {
-            content.title = task.title
-        }
-        if task.contents == "" {
-            content.body = "(内容なし)"
-        } else {
-            content.body = task.contents
-        }
+        // if task.title == "" {
+        //     content.title = "(タイトルなし)"
+        // } else {
+        content.title = task.title
+        // }
+        // if task.contents == "" {
+        //     content.body = "(内容なし)"
+        // } else {
+        content.body = task.contents
+        // }
         content.sound = UNNotificationSound.default
         
         // ローカル通知が発動するtrigger（日付マッチ）を作成
