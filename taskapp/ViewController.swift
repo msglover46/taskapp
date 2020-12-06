@@ -21,20 +21,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 以降内容をアップデートするとリスト内は自動的に更新される。
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
     
-    // 検索バーに文字が入力された時の処理
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        if searchText != "" {
-            taskArray = try! Realm().objects(Task.self)
-            .filter("category contains %@", searchText)
-            .sorted(byKeyPath: "date", ascending: true)
-        } else {
-            taskArray = try! Realm().objects(Task.self)
-            .sorted(byKeyPath: "date", ascending: true)
-        }
-        tableView.reloadData()
-    }
     
+    // 検索バーに文字が入力された時の処理
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // 0.1秒後に遅延実行
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if searchBar.text != "" {
+                self.taskArray = try! Realm().objects(Task.self)
+                    .filter("category contains %@", self.searchBar.text!)
+                    .sorted(byKeyPath: "date", ascending: true)
+            } else {
+                self.taskArray = try! Realm().objects(Task.self)
+                    .sorted(byKeyPath: "date", ascending: true)
+            }
+            self.tableView.reloadData()
+        }
+        return true
+    }
+      
     // 検索バーのキャンセルボタンを押下した時の処理
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
@@ -42,6 +46,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         taskArray = try! Realm().objects(Task.self)
         .sorted(byKeyPath: "date", ascending: true)
         tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     override func viewDidLoad() {
@@ -78,6 +90,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // 各セルを選択した時に実行されるメソッド
     func  tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        searchBar.endEditing(true)
         performSegue(withIdentifier: "cellSegue", sender: nil)
     }
     
@@ -101,6 +114,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // segue で画面遷移する時に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let inputViewController:InputViewController = segue.destination as! InputViewController
+        searchBar.endEditing(true)
         
         if segue.identifier == "cellSegue" {
             let indexPath = self.tableView.indexPathForSelectedRow

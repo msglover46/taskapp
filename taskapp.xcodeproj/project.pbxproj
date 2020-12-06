@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		93252CAEDEDD5C8C52199A13 /* Pods_taskapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14390F68ADCF626720A3F63A /* Pods_taskapp.framework */; };
 		A433F0F72574BBDE00455ED5 /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A433F0F62574BBDE00455ED5 /* InputViewController.swift */; };
 		A433F0FF2574C9A200455ED5 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = A433F0FE2574C9A200455ED5 /* Task.swift */; };
+		A4353296257A93DC00B5651B /* Pods_taskapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14390F68ADCF626720A3F63A /* Pods_taskapp.framework */; };
 		A435E96C25738969002EFE15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A435E96B25738969002EFE15 /* AppDelegate.swift */; };
 		A435E96E25738969002EFE15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A435E96D25738969002EFE15 /* SceneDelegate.swift */; };
 		A435E97025738969002EFE15 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A435E96F25738969002EFE15 /* ViewController.swift */; };
@@ -23,6 +23,7 @@
 		30BFA07CD0BA77F27E33A6C0 /* Pods-taskapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taskapp.release.xcconfig"; path = "Target Support Files/Pods-taskapp/Pods-taskapp.release.xcconfig"; sourceTree = "<group>"; };
 		A433F0F62574BBDE00455ED5 /* InputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
 		A433F0FE2574C9A200455ED5 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		A435324C257A2FB500B5651B /* taskapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "taskapp-Bridging-Header.h"; sourceTree = "<group>"; };
 		A435E96825738969002EFE15 /* taskapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = taskapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A435E96B25738969002EFE15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A435E96D25738969002EFE15 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93252CAEDEDD5C8C52199A13 /* Pods_taskapp.framework in Frameworks */,
+				A4353296257A93DC00B5651B /* Pods_taskapp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +94,7 @@
 				A435E9762573896A002EFE15 /* LaunchScreen.storyboard */,
 				A435E9792573896A002EFE15 /* Info.plist */,
 				A433F0FE2574C9A200455ED5 /* Task.swift */,
+				A435324C257A2FB500B5651B /* taskapp-Bridging-Header.h */,
 			);
 			path = taskapp;
 			sourceTree = "<group>";
@@ -130,6 +132,7 @@
 				TargetAttributes = {
 					A435E96725738969002EFE15 = {
 						CreatedOnToolsVersion = 12.2;
+						LastSwiftMigration = 1220;
 					};
 				};
 			};
@@ -363,6 +366,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z36HZ8PUCD;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -374,6 +378,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.msglover46.taskapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "taskapp/taskapp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -385,6 +391,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z36HZ8PUCD;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -396,6 +403,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.msglover46.taskapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "taskapp/taskapp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
