@@ -8,12 +8,12 @@
 import UIKit
 import RealmSwift
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    // Realmインスタンスを取得する
+    // Realmインスタンスを取得する。
     let realm = try! Realm()
     
     // DB内のタスクが格納されるリスト。
@@ -21,8 +21,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 以降内容をアップデートするとリスト内は自動的に更新される。
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
     
-    
-    // 検索バーに文字が入力された時の処理
+    // 検索バーに文字が入力された時に呼ばれるメソッド
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // 0.1秒後に遅延実行
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -39,13 +38,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return true
     }
       
-    // 検索バーのキャンセルボタンを押下した時の処理
+    // 検索バーのキャンセルボタンを押下した時に呼ばれるメソッド
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.endEditing(true)
         taskArray = try! Realm().objects(Task.self)
         .sorted(byKeyPath: "date", ascending: true)
         tableView.reloadData()
+    }
+    
+    // 検索バーのブックマークボタンを押下した時に呼ばれるメソッド
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        let categorycount = try! Realm().objects(Category.self).count
+        if categorycount > 0 {
+            performSegue(withIdentifier: "selectCategorySegue", sender: nil)
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -62,7 +70,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
-        
     }
 
     // データの数（セルの数）を返すメソッド
@@ -72,7 +79,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // 各セルの内容を返すメソッド
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 再利用可能なcellを得る
+        // 再利用可能なcellを得る。
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         // Cellに値を設定する。
@@ -83,7 +90,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         
-        let dateString:String = formatter.string(from: task.date)
+        let dateString:String = formatter.string(from: task.date) + " / " + task.category
         cell.detailTextLabel?.text = dateString
         return cell
     }
@@ -91,7 +98,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 各セルを選択した時に実行されるメソッド
     func  tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchBar.endEditing(true)
-        performSegue(withIdentifier: "cellSegue", sender: nil)
+        performSegue(withIdentifier: "editTaskSegue", sender: nil)
     }
     
     // セルが削除可能なことを伝えるメソッド
@@ -111,23 +118,36 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
-    // segue で画面遷移する時に呼ばれる
+    // segue で画面遷移する時に呼ばれるメソッド
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let inputViewController:InputViewController = segue.destination as! InputViewController
         searchBar.endEditing(true)
-        
-        if segue.identifier == "cellSegue" {
+        switch segue.identifier {
+        case "editTaskSegue": // セルをタップしてタスク編集画面へ遷移
+            let inputViewController:InputViewController = segue.destination as! InputViewController
             let indexPath = self.tableView.indexPathForSelectedRow
             inputViewController.task = taskArray[indexPath!.row]
-        } else {
+            inputViewController.title = "タスク編集"
+        
+        case "newTaskSegue": // ＋ボタンをタップしてタスク作成画面へ遷移
+            let inputViewController:InputViewController = segue.destination as! InputViewController
             let task = Task()
             
             let allTasks = realm.objects(Task.self)
             if allTasks.count != 0 {
                 task.id = allTasks.max(ofProperty: "id")! + 1
             }
-            
             inputViewController.task = task
+            inputViewController.title = "タスク作成"
+        
+        default: // 検索バーのブックマークボタンをタップしてカテゴリー選択のポップアップを表示
+            let selectCategoryViewController:SelectCategoryViewController = segue.destination as! SelectCategoryViewController
+           selectCategoryViewController.closure = {(str: String) -> Void in   self.searchBar.text = str
+               self.taskArray = try! Realm().objects(Task.self)
+                   .filter("category contains %@", str)
+                   .sorted(byKeyPath: "date", ascending: true)
+               self.tableView.reloadData()
+           }
+            segue.destination.popoverPresentationController?.delegate = self
         }
     }
     
@@ -137,4 +157,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.reloadData()
     }
     
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
+    }
 }

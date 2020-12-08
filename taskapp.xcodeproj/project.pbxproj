@@ -10,12 +10,16 @@
 		A433F0F72574BBDE00455ED5 /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A433F0F62574BBDE00455ED5 /* InputViewController.swift */; };
 		A433F0FF2574C9A200455ED5 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = A433F0FE2574C9A200455ED5 /* Task.swift */; };
 		A4353296257A93DC00B5651B /* Pods_taskapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14390F68ADCF626720A3F63A /* Pods_taskapp.framework */; };
+		A43532A3257CD07B00B5651B /* SelectCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43532A2257CD07B00B5651B /* SelectCategoryViewController.swift */; };
+		A43532AB257CFAE200B5651B /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43532AA257CFAE200B5651B /* Category.swift */; };
 		A435E96C25738969002EFE15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A435E96B25738969002EFE15 /* AppDelegate.swift */; };
 		A435E96E25738969002EFE15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A435E96D25738969002EFE15 /* SceneDelegate.swift */; };
 		A435E97025738969002EFE15 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A435E96F25738969002EFE15 /* ViewController.swift */; };
 		A435E97325738969002EFE15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A435E97125738969002EFE15 /* Main.storyboard */; };
 		A435E9752573896A002EFE15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A435E9742573896A002EFE15 /* Assets.xcassets */; };
 		A435E9782573896A002EFE15 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A435E9762573896A002EFE15 /* LaunchScreen.storyboard */; };
+		A4425883257DC523005FF8C4 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4425882257DC523005FF8C4 /* NewCategoryViewController.swift */; };
+		A4425886257DC55C005FF8C4 /* CategoryPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4425885257DC55C005FF8C4 /* CategoryPickerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +27,8 @@
 		30BFA07CD0BA77F27E33A6C0 /* Pods-taskapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taskapp.release.xcconfig"; path = "Target Support Files/Pods-taskapp/Pods-taskapp.release.xcconfig"; sourceTree = "<group>"; };
 		A433F0F62574BBDE00455ED5 /* InputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
 		A433F0FE2574C9A200455ED5 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		A435324C257A2FB500B5651B /* taskapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "taskapp-Bridging-Header.h"; sourceTree = "<group>"; };
+		A43532A2257CD07B00B5651B /* SelectCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCategoryViewController.swift; sourceTree = "<group>"; };
+		A43532AA257CFAE200B5651B /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A435E96825738969002EFE15 /* taskapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = taskapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A435E96B25738969002EFE15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A435E96D25738969002EFE15 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +37,8 @@
 		A435E9742573896A002EFE15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A435E9772573896A002EFE15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A435E9792573896A002EFE15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A4425882257DC523005FF8C4 /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
+		A4425885257DC55C005FF8C4 /* CategoryPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerViewController.swift; sourceTree = "<group>"; };
 		D79493C68CBC4169169C9D8B /* Pods-taskapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taskapp.debug.xcconfig"; path = "Target Support Files/Pods-taskapp/Pods-taskapp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,12 +96,15 @@
 				A435E96D25738969002EFE15 /* SceneDelegate.swift */,
 				A435E96F25738969002EFE15 /* ViewController.swift */,
 				A433F0F62574BBDE00455ED5 /* InputViewController.swift */,
+				A43532A2257CD07B00B5651B /* SelectCategoryViewController.swift */,
+				A4425882257DC523005FF8C4 /* NewCategoryViewController.swift */,
+				A4425885257DC55C005FF8C4 /* CategoryPickerViewController.swift */,
 				A435E97125738969002EFE15 /* Main.storyboard */,
 				A435E9742573896A002EFE15 /* Assets.xcassets */,
 				A435E9762573896A002EFE15 /* LaunchScreen.storyboard */,
 				A435E9792573896A002EFE15 /* Info.plist */,
 				A433F0FE2574C9A200455ED5 /* Task.swift */,
-				A435324C257A2FB500B5651B /* taskapp-Bridging-Header.h */,
+				A43532AA257CFAE200B5651B /* Category.swift */,
 			);
 			path = taskapp;
 			sourceTree = "<group>";
@@ -214,11 +224,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4425886257DC55C005FF8C4 /* CategoryPickerViewController.swift in Sources */,
+				A43532A3257CD07B00B5651B /* SelectCategoryViewController.swift in Sources */,
+				A4425883257DC523005FF8C4 /* NewCategoryViewController.swift in Sources */,
 				A435E97025738969002EFE15 /* ViewController.swift in Sources */,
 				A435E96C25738969002EFE15 /* AppDelegate.swift in Sources */,
 				A433F0FF2574C9A200455ED5 /* Task.swift in Sources */,
 				A435E96E25738969002EFE15 /* SceneDelegate.swift in Sources */,
 				A433F0F72574BBDE00455ED5 /* InputViewController.swift in Sources */,
+				A43532AB257CFAE200B5651B /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,7 +392,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.msglover46.taskapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "taskapp/taskapp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -403,7 +416,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.msglover46.taskapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "taskapp/taskapp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -9,16 +9,19 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class InputViewController: UIViewController {
+class InputViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var button: UIButton!
     
     var task: Task!
     let realm = try! Realm()
-    
+    var viewTitle = ""
+ 
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,6 +33,8 @@ class InputViewController: UIViewController {
         categoryTextField.text = task.category
         contentsTextView.text = task.contents
         datePicker.date = task.date
+        
+        checkButton()
     }
     
     @objc func dismissKeyboard() {
@@ -48,6 +53,19 @@ class InputViewController: UIViewController {
                 self.realm.add(self.task, update: .modified)
             }
             setNotification(task: task)
+            
+            // 入力されたカテゴリーが未登録の場合、登録する。
+            if realm.objects(Category.self).filter("category == %@", categoryTextField.text).count == 0 {
+                try! realm.write {
+                    let allCategories = realm.objects(Category.self)
+                    let registingCategory = Category()
+                    if allCategories.count != 0 {
+                        registingCategory.id = allCategories.max(ofProperty: "id")! + 1
+                    }
+                    registingCategory.category = categoryTextField.text!
+                    realm.add(registingCategory, update: .modified)
+                }
+            }
         }
         super.viewWillDisappear(animated)
     }
@@ -55,17 +73,8 @@ class InputViewController: UIViewController {
     // タスクのローカル通知を登録する
     func setNotification(task: Task) {
         let content = UNMutableNotificationContent()
-        //タイトルと内容を設定（中身がない場合はメッセージなしで音だけの通知になるので「（xxなし）」を表示する）
-        // if task.title == "" {
-        //     content.title = "(タイトルなし)"
-        // } else {
         content.title = task.title
-        // }
-        // if task.contents == "" {
-        //     content.body = "(内容なし)"
-        // } else {
         content.body = task.contents
-        // }
         content.sound = UNNotificationSound.default
         
         // ローカル通知が発動するtrigger（日付マッチ）を作成
@@ -92,4 +101,32 @@ class InputViewController: UIViewController {
         }
     }
 
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "categoryPickerSegue" {
+            // 選択ボタンを押下してカテゴリーピッカーのポップアップに遷移
+            let categoryPickerViewController: CategoryPickerViewController = segue.destination as! CategoryPickerViewController
+            categoryPickerViewController.inputCategory = self.categoryTextField.text
+            categoryPickerViewController.closure = {(str:String) -> Void in self.categoryTextField.text = str
+            }
+            segue.destination.popoverPresentationController?.delegate = self
+        } else {
+            // ＋ボタンを押下してカテゴリー作成画面へ遷移
+            let newCategoryViewController: NewCategoryViewController = segue.destination as! NewCategoryViewController
+            newCategoryViewController.closure = {self.checkButton()}
+        }
+    }
+    
+    // 選択ボタンの活性、非活性を制御するメソッド
+    func checkButton () {
+        let registedCategorycount = try! Realm().objects(Category.self).count
+        if registedCategorycount > 0 {
+            button.isEnabled = true
+        } else {
+            button.isEnabled = false
+        }
+    }
 }

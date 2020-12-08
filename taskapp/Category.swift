@@ -1,27 +1,18 @@
 //
-//  Task.swift
+//  Category.swift
 //  taskapp
 //
-//  Created by 三輪駿 on 2020/11/30.
+//  Created by 三輪駿 on 2020/12/06.
 //
 
 import RealmSwift
 
-class Task: Object {
+class Category: Object {
     // 管理用ID。プライマリーキー
     @objc dynamic var id = 0
-    
-    // タイトル
-    @objc dynamic var title = ""
-    
+        
     // カテゴリー
     @objc dynamic var category = ""
-    
-    // 内容
-    @objc dynamic var contents = ""
-    
-    //日時
-    @objc dynamic var date = Date()
     
     // idをプライマリーキーに設定
     override static func primaryKey() -> String? {
