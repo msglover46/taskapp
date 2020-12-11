@@ -15,7 +15,7 @@ class SelectCategoryViewController: UIViewController, UITableViewDelegate, UITab
     let realm = try! Realm()
     var categoryArray = try! Realm().objects(Category.self)
     var closure: ((String) -> Void)?
-    var categories = try! Realm().objects(Task.self).value(forKey: "category") as! [String]
+    var categories = try! Realm().objects(Task.self).value(forKey: "category.title") as! [String]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,14 +36,14 @@ class SelectCategoryViewController: UIViewController, UITableViewDelegate, UITab
         
         // Cellに値を設定する。
         let category = categoryArray[indexPath.row]
-        cell.textLabel?.text = category.category
+        cell.textLabel?.text = category.title
         
         return cell
     }
     
     // 各セルを選択した時に実行されるメソッド
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        closure?(categoryArray[indexPath.row].category)
+        closure?(categoryArray[indexPath.row].title)
         dismiss(animated: true, completion: nil)
     }
     
@@ -57,7 +57,7 @@ class SelectCategoryViewController: UIViewController, UITableViewDelegate, UITab
         
         if editingStyle == .delete {
             // タスク一覧に使われていないカテゴリーの場合のみ、データベースから削除する。
-            if !categories.contains(categoryArray[indexPath.row].category) {
+            if !categories.contains(categoryArray[indexPath.row].title) {
                 try! realm.write {
                     self.realm.delete(self.categoryArray[indexPath.row])
                     tableView.deleteRows(at: [indexPath], with: .fade)

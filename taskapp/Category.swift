@@ -12,7 +12,7 @@ class Category: Object {
     @objc dynamic var id = 0
         
     // カテゴリー
-    @objc dynamic var category = ""
+    @objc dynamic var title = ""
     
     // idをプライマリーキーに設定
     override static func primaryKey() -> String? {

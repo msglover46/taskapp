@@ -14,7 +14,7 @@ class CategoryPickerViewController: UIViewController, UIPickerViewDataSource, UI
     var closure: ((String) -> Void)?
     var realm = try! Realm()
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: true)
-    var categories = try! Realm().objects(Category.self).value(forKey: "category") as! [String]
+    var categories = try! Realm().objects(Category.self).value(forKey: "title") as! [String]
     var inputCategory: String!
     var pickerArray = ["カテゴリを選択してください。"]
     
@@ -22,15 +22,16 @@ class CategoryPickerViewController: UIViewController, UIPickerViewDataSource, UI
         super.viewDidLoad()
         pickerView.dataSource = self
         pickerView.delegate = self
-        
         self.preferredContentSize = CGSize(width: 400, height: 200)
-        
         pickerArray += categories
         // ピッカーの初期状態を指定する。
+        print("a")
         if inputCategory == nil || !categories.contains(inputCategory) {
+            print("b")
             pickerView.selectRow(0, inComponent: 0, animated: false)
         } else {
-            let row = try! Realm().objects(Category.self).filter("category == %@", inputCategory).first?.value(forKey: "id") as! Int
+            print("c")
+            let row = try! Realm().objects(Category.self).filter("title == %@", inputCategory).first?.value(forKey: "id") as! Int
             pickerView.selectRow(row + 1, inComponent: 0, animated: false)
         }
     }
@@ -48,7 +49,7 @@ class CategoryPickerViewController: UIViewController, UIPickerViewDataSource, UI
     // ピッカーを選択された時のメソッド
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if row > 0 {
-            closure?(categoryArray[row - 1].category)
+            closure?(categoryArray[row - 1].title)
         }
     }
     

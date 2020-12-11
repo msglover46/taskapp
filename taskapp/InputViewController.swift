@@ -12,16 +12,15 @@ import UserNotifications
 class InputViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var categoryLabel: UILabel!
     
     var task: Task!
     let realm = try! Realm()
     var viewTitle = ""
  
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,7 +29,7 @@ class InputViewController: UIViewController, UIPopoverPresentationControllerDele
         self.view.addGestureRecognizer(tapGesture)
         
         titleTextField.text = task.title
-        categoryTextField.text = task.category
+        categoryLabel.text = task.category?.title
         contentsTextView.text = task.contents
         datePicker.date = task.date
         
@@ -44,28 +43,20 @@ class InputViewController: UIViewController, UIPopoverPresentationControllerDele
 
     override func viewWillDisappear(_ animated: Bool) {
         // タイトルとカテゴリーの両方を入力しないとタスクとして登録しないようにする。
-        if titleTextField.text != "" && categoryTextField.text != "" {
+        if titleTextField.text != "" && categoryLabel.text != nil {
+                
+            let categories = try! Realm().objects(Category.self).filter("title == %@", categoryLabel.text!)
+            let category = categories[0]
+
             try! realm.write {
                 self.task.title = self.titleTextField.text!
-                self.task.category = self.categoryTextField.text!
+                self.task.category = category
                 self.task.contents = self.contentsTextView.text
                 self.task.date = self.datePicker.date
                 self.realm.add(self.task, update: .modified)
             }
             setNotification(task: task)
             
-            // 入力されたカテゴリーが未登録の場合、登録する。
-            if realm.objects(Category.self).filter("category == %@", categoryTextField.text).count == 0 {
-                try! realm.write {
-                    let allCategories = realm.objects(Category.self)
-                    let registingCategory = Category()
-                    if allCategories.count != 0 {
-                        registingCategory.id = allCategories.max(ofProperty: "id")! + 1
-                    }
-                    registingCategory.category = categoryTextField.text!
-                    realm.add(registingCategory, update: .modified)
-                }
-            }
         }
         super.viewWillDisappear(animated)
     }
@@ -109,8 +100,8 @@ class InputViewController: UIViewController, UIPopoverPresentationControllerDele
         if segue.identifier == "categoryPickerSegue" {
             // 選択ボタンを押下してカテゴリーピッカーのポップアップに遷移
             let categoryPickerViewController: CategoryPickerViewController = segue.destination as! CategoryPickerViewController
-            categoryPickerViewController.inputCategory = self.categoryTextField.text
-            categoryPickerViewController.closure = {(str:String) -> Void in self.categoryTextField.text = str
+            categoryPickerViewController.inputCategory = self.categoryLabel.text
+            categoryPickerViewController.closure = {(str:String) -> Void in self.categoryLabel.text = str
             }
             segue.destination.popoverPresentationController?.delegate = self
         } else {

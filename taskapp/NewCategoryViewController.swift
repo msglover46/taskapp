@@ -16,8 +16,7 @@ class NewCategoryViewController: UIViewController, UITableViewDelegate, UITableV
     
     var realm = try! Realm()
     var categoryArray = try! Realm().objects(Category.self)
-    var categories = try! Realm().objects(Task.self).value(forKey: "category") as! [String]
-
+    var categories = try! Realm().objects(Task.self).value(forKey: "category") as! [Category]
     
     // InputViewControllerからの遷移時に 選択ボタンの活性/非活性を制御するメソッドがセットされる。
     var closure: (() -> Void)?
@@ -42,7 +41,7 @@ class NewCategoryViewController: UIViewController, UITableViewDelegate, UITableV
         
         // Cellに値を設定する。
         let category = categoryArray[indexPath.row]
-        cell.textLabel?.text = category.category
+        cell.textLabel?.text = category.title
         
         return cell
     }
@@ -57,8 +56,8 @@ class NewCategoryViewController: UIViewController, UITableViewDelegate, UITableV
         
         if editingStyle == .delete {
             // タスク一覧に使われていないカテゴリーの場合のみ、データベースから削除する。
-            if !categories.contains(categoryArray[indexPath.row].category) {
-                let delCategory = self.categoryArray[indexPath.row].category
+            if !categories.contains(categoryArray[indexPath.row]) {
+                let delCategory = self.categoryArray[indexPath.row].title
                 try! realm.write {
                     self.realm.delete(self.categoryArray[indexPath.row])
                     tableView.deleteRows(at: [indexPath], with: .fade)
@@ -91,7 +90,7 @@ class NewCategoryViewController: UIViewController, UITableViewDelegate, UITableV
     
    // 登録ボタン押下時に呼ばれるメソッド
     @IBAction func tapButton(_ sender: Any) {
-        let registedCategories = try! Realm().objects(Category.self).value(forKey: "category") as! [String]
+        let registedCategories = try! Realm().objects(Category.self).value(forKey: "title") as! [String]
         if !registedCategories.contains(categoryTextField.text!) {
             // 登録済みのカテゴリーに存在しない場合のみ登録する。
             try! realm.write {
@@ -100,7 +99,7 @@ class NewCategoryViewController: UIViewController, UITableViewDelegate, UITableV
                 if allCategories.count != 0 {
                     registingCategory.id = allCategories.max(ofProperty: "id")! + 1
                 }
-                registingCategory.category = categoryTextField.text!
+                registingCategory.title = categoryTextField.text!
                 realm.add(registingCategory, update: .modified)
                 label.text = "\(categoryTextField.text!) を登録しました。"
                 closure?()

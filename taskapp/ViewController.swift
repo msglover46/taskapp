@@ -27,7 +27,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             if searchBar.text != "" {
                 self.taskArray = try! Realm().objects(Task.self)
-                    .filter("category contains %@", self.searchBar.text!)
+                    .filter("category.title contains %@", self.searchBar.text!)
                     .sorted(byKeyPath: "date", ascending: true)
             } else {
                 self.taskArray = try! Realm().objects(Task.self)
@@ -90,7 +90,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         
-        let dateString:String = formatter.string(from: task.date) + " / " + task.category
+        let dateString:String = formatter.string(from: task.date) + " / " + task.category!.title
         cell.detailTextLabel?.text = dateString
         return cell
     }
@@ -143,7 +143,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let selectCategoryViewController:SelectCategoryViewController = segue.destination as! SelectCategoryViewController
            selectCategoryViewController.closure = {(str: String) -> Void in   self.searchBar.text = str
                self.taskArray = try! Realm().objects(Task.self)
-                   .filter("category contains %@", str)
+                   .filter("category.title contains %@", str)
                    .sorted(byKeyPath: "date", ascending: true)
                self.tableView.reloadData()
            }
